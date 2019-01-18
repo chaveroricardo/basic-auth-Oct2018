@@ -13,6 +13,8 @@ const MongoStore    = require('connect-mongo')(session);
 const bcrypt        = require('bcrypt');
 const passport      = require('passport');
 const LocalStrategy = require("passport-local").Strategy;
+const User          = require('./models/user');
+const flash         = require("connect-flash");
 
 
 mongoose
@@ -34,6 +36,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 app.use(session({
   secret: "our-passport-local-strategy-app",
   resave: true,
@@ -65,9 +68,10 @@ passport.use(new LocalStrategy((username, password, next) => {
     }
 
     return next(null, user);
-  });
-}));
+  })
+}))
 
+app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -86,14 +90,14 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
-app.use(session({
-  secret: "basic-auth-secret",
-  cookie: { maxAge: 60000 },
-  store: new MongoStore({
-    mongooseConnection: mongoose.connection,
-    ttl: 24*60*60
-  })
-}));
+// app.use(session({
+//   secret: "basic-auth-secret",
+//   cookie: { maxAge: 60000 },
+//   store: new MongoStore({
+//     mongooseConnection: mongoose.connection,
+//     ttl: 24*60*60
+//   })
+// }));
 
 
 // default value for title local
