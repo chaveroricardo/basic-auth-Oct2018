@@ -1,0 +1,9 @@
+{
+  "name":"plm",
+  "version": 1,
+  "type": "npm",
+  "alias": "plm",
+  "engines":{
+    "node": "10.4.2"
+  }
+}
