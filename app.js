@@ -18,7 +18,7 @@ const flash         = require("connect-flash");
 
 
 mongoose
-  .connect('mongodb://localhost/basic-auth', {useNewUrlParser: true})
+  .connect(process.env.MONGODB, {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -70,6 +70,30 @@ passport.use(new LocalStrategy((username, password, next) => {
     return next(null, user);
   })
 }))
+
+// passport.use(new SlackStrategy({
+//   clientID: "8932073120.527979211191",
+//   clientSecret: "8a20fa2984d5311c80fb10f014d1c2b0"
+// }, (accessToken, refreshToken, profile, done) => {
+//   User.findOne({slackID: profile.id})
+//   .then(user=>{
+//     if(err)
+//     return done(err)
+//     if(user){
+//       return donw(null, user)
+//     }
+//     const newUser = new User({
+//       slackID: profile.id
+//     })
+
+//     newUser.save()
+//     .then(user=>{
+//       done(null, profile);
+//     })
+//   })
+ 
+// }
+// ));
 
 app.use(flash())
 app.use(passport.initialize());
