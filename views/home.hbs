@@ -3,4 +3,14 @@
   <a href="/login">Entre a la plataforma</a>
   <a href="/secret">Solo para No-Muggles</a>
   <a href="/logout">Ya se puede ir...</a>
+
+  <a href="/auth/slack">Ingresa con Slack</a>
+
+{{#unless user}}
+  Home page
+  <div>
+    <a href="/auth/google">Login</a>
+  </div>
+{{/unless}}
+
 </div>
