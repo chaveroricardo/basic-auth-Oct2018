@@ -19,9 +19,7 @@ const flash         = require("connect-flash");
 
 
 mongoose
-  .connect(
-    process.env.MONGODB, 
-    {useNewUrlParser: true})
+  .connect(process.env.MONGODB, {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -40,14 +38,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(
-  session({
+app.use(session({
   secret: "our-passport-local-strategy-app",
   resave: true,
-  saveUninitialized: true,
-  store: new MongoStore({mongooseConnection: mongoose.connection})
-})
-);
+  saveUninitialized: true
+}));
 
 
 passport.serializeUser((user, cb) => {
@@ -77,65 +72,29 @@ passport.use(new LocalStrategy((username, password, next) => {
   })
 }))
 
-
+// passport.use(new SlackStrategy({
 //   clientID: "8932073120.527979211191",
 //   clientSecret: "8a20fa2984d5311c80fb10f014d1c2b0"
+// }, (accessToken, refreshToken, profile, done) => {
+//   User.findOne({slackID: profile.id})
+//   .then(user=>{
+//     if(err)
+//     return done(err)
+//     if(user){
+//       return donw(null, user)
+//     }
+//     const newUser = new User({
+//       slackID: profile.id
+//     })
 
-
-passport.use(
-  new SlackStrategy(
-    {
-      clientID: "8932073120.527979211191",
-      clientSecret: "8a20fa2984d5311c80fb10f014d1c2b0"
-    },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ slackID: profile.id })
-        .then(user => {
-          // if(err)
-          //   return done(err)
-          if (user) {
-            return done(null, user);
-          }
-          const newUser = new User({
-            slackID: profile.id
-          });
-
-          newUser.save().then(user => {
-            done(null, newUser);
-          });
-        })
-        .catch(error => {
-          done(error);
-        });
-    }
-  )
-);
-
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID:
-        "170395869679-2ugskkcr3189rdoc5r7fitasjgne1trt.apps.googleusercontent.com",
-      clientSecret: "5iqQYId4KhD-_vN0ghOnT8mD",
-      callbackURL: "/auth/google/callback"
-    },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleID: profile.id })
-        .then(user => {
-          if (user) return done(null, user);
-          const newUser = new User({
-            googleID: profile.id
-          });
-          newUser.save().then(user => {
-            done(null, newUser);
-          });
-        })
-        .catch(error => {
-          done(error);
-        });
-    }
-  )
-);
+//     newUser.save()
+//     .then(user=>{
+//       done(null, profile);
+//     })
+//   })
+ 
+// }
+// ));
 
 app.use(flash())
 app.use(passport.initialize());
