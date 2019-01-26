@@ -9,6 +9,7 @@ const mongoose      = require('mongoose');
 const logger        = require('morgan');
 const path          = require('path');
 const session       = require('express-session');
+const session = require("express-session");
 const MongoStore    = require('connect-mongo')(session);
 const bcrypt        = require('bcrypt');
 const passport      = require('passport');
@@ -18,7 +19,9 @@ const flash         = require("connect-flash");
 
 
 mongoose
-  .connect("mongodb://admin:Thelastride7@ds211875.mlab.com:11875/passport-demo", {useNewUrlParser: true})
+  .connect(
+    process.env.MONGODB, 
+    {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -37,11 +40,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(session({
+app.use(
+  session({
   secret: "our-passport-local-strategy-app",
   resave: true,
-  saveUninitialized: true
-}));
+  saveUninitialized: true,
+  store: new MongoStore({mongooseConnection: mongoose.connection})
+})
+);
 
 
 passport.serializeUser((user, cb) => {
