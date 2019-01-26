@@ -1,7 +1,13 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 
-<a href="/auth/slack">Ingresa con Slack</a>
+<div class="container">
+  <a href="/signup">Crea tu usuario</a>
+  <a href="/login">Entre a la plataforma</a>
+  <a href="/secret">Solo para No-Muggles</a>
+  <a href="/logout">Ya se puede ir...</a>
+
+  <a href="/auth/slack">Ingresa con Slack</a>
 
 {{#unless user}}
   Home page
@@ -9,3 +15,5 @@
     <a href="/auth/google">Login</a>
   </div>
 {{/unless}}
+
+</div>
