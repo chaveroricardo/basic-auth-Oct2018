@@ -7,3 +7,6 @@
     host: socialloginlbachelier25ene
     path: .
     command: npm start
+  env:
+    MONGODB: mongodb://admin:Thelastride7@ds211875.mlab.com:11875/passport-demo
+
